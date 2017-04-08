@@ -1,0 +1,10 @@
+add_executable(test_fftw3cxx test_fftw3cxx.cc)
+target_include_directories(test_fftw3cxx PUBLIC ${PROJECT_SOURCE_DIR}/include)
+add_test(test_fftw3cxx test_fftw3cxx)
+
+foreach(COMPONENT FFTW3 FFTW3F FFTW3L FFTW3_THREADS FFTW3F_THREADS FFTW3L_THREADS)
+    if (FFTW3_${COMPONENT}_FOUND)
+        target_link_libraries(test_fftw3cxx ${FFTW3_${COMPONENT}_LIBRARY})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFFTW3CXX_TEST_${COMPONENT}")
+    endif()
+endforeach()
