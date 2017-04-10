@@ -1,4 +1,4 @@
-//  fftw3cxx.h version 1.0
+//  fftw3cxx.hh version 1.1
 /*
  *  Copyright (c) 2017 Gregory E. Allen
  *  
