@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 #include "fftw3cxx.hh"
 
 template <typename T>
@@ -43,8 +44,14 @@ int test_fftw3cxx(const int N)
         std::cout << "expected exception: " << ex.what() << std::endl;
     }
 
-    typename fftw3cxx::fftw<T>::complex *inc = fftw3cxx::alloc_complex<T>(N*N*N);
-    typename fftw3cxx::fftw<T>::complex *outc = fftw3cxx::alloc_complex<T>(N*N*N);
+    typedef typename fftw3cxx::fftw<T>::complex complex;
+#if 0
+    complex *inc = fftw3cxx::alloc_complex<T>(N*N*N);   // new in fftw-3.3
+    complex *outc = fftw3cxx::alloc_complex<T>(N*N*N);
+#else
+    complex *inc = (complex*)fftw3cxx::malloc<T>(N*N*N*sizeof(T)*2);
+    complex *outc = (complex*)fftw3cxx::malloc<T>(N*N*N*sizeof(T)*2);
+#endif
     std::complex<T> *in = (std::complex<T>*)inc;
     std::complex<T> *out = (std::complex<T>*)outc;
 

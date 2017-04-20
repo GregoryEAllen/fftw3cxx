@@ -1,4 +1,4 @@
-//  fftw3cxx.hh version 1.1
+//  fftw3cxx.hh version 1.2
 /*
  *  Copyright (c) 2017 Gregory E. Allen
  *  
@@ -68,20 +68,33 @@
 #include <fftw3.h>
 
 //---
-// Between releases 3.3.2 and 3.3.5, fftw added three new API functions.
-// We forward declare them here, so we can work with any of these versions.
+// Between fftw releases 3.2 and 3.3.5, several new API functions were added.
+// We forward declare them here, so fftw3cxx works with any of these versions.
 // If these functions were also declared in fftw3.h, no harm.
 //---
+
+#define FFTW3CXX_DEFINE_FFTW330_NEW_API(X, R, C) \
+FFTW_EXTERN int X(export_wisdom_to_filename)(const char *filename); \
+FFTW_EXTERN void X(export_wisdom_to_file)(FILE *output_file); \
+FFTW_EXTERN int X(import_wisdom_from_filename)(const char *filename); \
+FFTW_EXTERN int X(import_wisdom_from_file)(FILE *input_file); \
+FFTW_EXTERN R *X(alloc_real)(size_t n); \
+FFTW_EXTERN C *X(alloc_complex)(size_t n); \
+FFTW_EXTERN double X(cost)(const X(plan) p);
 
 #define FFTW3CXX_DEFINE_FFTW335_NEW_API(X, R, C) \
 FFTW_EXTERN char *X(sprint_plan)(const X(plan) p); \
 FFTW_EXTERN int X(alignment_of)(R *p); \
 FFTW_EXTERN void X(make_planner_thread_safe)(void);
 
-FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
-FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_FLOAT, float, fftwf_complex)
-FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_LONG_DOUBLE, long double, fftwl_complex)
-
+extern "C" {
+    FFTW3CXX_DEFINE_FFTW330_NEW_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
+    FFTW3CXX_DEFINE_FFTW330_NEW_API(FFTW_MANGLE_FLOAT, float, fftwf_complex)
+    FFTW3CXX_DEFINE_FFTW330_NEW_API(FFTW_MANGLE_LONG_DOUBLE, long double, fftwl_complex)
+    FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
+    FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_FLOAT, float, fftwf_complex)
+    FFTW3CXX_DEFINE_FFTW335_NEW_API(FFTW_MANGLE_LONG_DOUBLE, long double, fftwl_complex)
+};
 
 namespace fftw3cxx {
 
